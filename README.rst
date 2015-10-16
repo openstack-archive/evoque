@@ -22,3 +22,9 @@ https://blueprints.launchpad.net/evoque
 Bug Tracking
 ------------
 https://bugs.launchpad.net/evoque
+
+IRC
+---
+IRC Channel: #openstack-evoque on `Freenode`_.
+
+.. _Freenode: http://freenode.net/
