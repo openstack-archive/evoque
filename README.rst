@@ -1,7 +1,11 @@
 OpenStack Evoque README
 =======================
 
-OpenSatck Evoque provides tickets service.
+OpenStack Evoque provides ticket service.
+
+Wiki
+-----
+https://wiki.openstack.org/wiki/Evoque
 
 Launchpad Projects
 ------------------
