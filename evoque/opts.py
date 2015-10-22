@@ -16,9 +16,9 @@ from oslo_config import cfg
 def list_opts():
     return [
         ("api", (
-            cfg.IntOpt('port',
-                       default=8888,
-                       help='The port for the Evoque API server.'),
+            cfg.PortOpt('port',
+                        default=8888,
+                        help='The port for the Evoque API server.'),
             cfg.StrOpt('host',
                        default='0.0.0.0',
                        help='The listen IP for the Evoque API server.'),
