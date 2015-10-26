@@ -1,4 +1,5 @@
 *.pyc
+*.pyo
 *.swp
 *.sqlite3
 .environment_version
