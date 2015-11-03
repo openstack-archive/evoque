@@ -39,7 +39,7 @@ class NotImplementedMiddleware(object):
         except exceptions.NotImplementedError:
             raise webob.exc.HTTPNotImplemented(
                 "Sorry, this Evoque server does "
-                "not implement this feature 😞")
+                "not implement this feature :(")
 
 
 def setup_app(config=PECAN_CONFIG, cfg=None):
