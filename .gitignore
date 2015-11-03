@@ -29,3 +29,4 @@ tags
 openstack_dashboard/dummydb.sqlite
 .testrepository/
 *.lock
+subunit.log
