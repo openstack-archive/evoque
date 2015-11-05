@@ -1,0 +1,108 @@
+#!/bin/bash
+#
+# lib/evoque
+# Install and start **Evoque** service
+
+# To enable, add the following to localrc
+#
+#   ENABLED_SERVICES+=,evoque,evoque-api
+
+# Dependencies:
+#
+# - functions
+
+# stack.sh
+# ---------
+# - install_evoque
+# - configure_evoque
+# - init_evoque
+# - start_evoque
+# - stop_evoque
+# - cleanup_evoque
+
+# Save trace setting
+XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+
+# Defaults
+# --------
+
+# set up default
+EVOQUE_CONF_DIR=/etc/evoque
+EVOQUE_CONF=$EVOQUE_CONF_DIR/evoque.conf
+EVOQUE_API_HOST=${EVOQUE_API_HOST:-$HOST_IP}
+EVOQUE_API_PORT=${EVOQUE_API_PORT:-8888}
+
+EVOQUE_DIR=$DEST/evoque
+EVOQUE_REPO=${EVOQUE_REPO:-${GIT_BASE}/openstack/evoque.git}
+EVOQUE_BRANCH=${EVOQUE_BRANCH:-master}
+
+# Functions
+# ---------
+
+# Test if any evoque services are enabled
+function is_evoque_enabled {
+    [[ ,${ENABLED_SERVICES} =~ ,"evoque-" ]] && return 0
+    return 1
+}
+
+# cleanup_evoque() - Remove residual data files, anything left over from previous
+# runs that a clean run would need to clean up
+function cleanup_evoque {
+    sudo rm -rf $EVOQUE_CONF_DIR
+}
+
+# configure_evoque() - Set config files, create data dirs, etc
+function configure_evoque {
+
+    if [[ ! -d $EVOQUE_CONF_DIR ]]; then
+        sudo mkdir -p $EVOQUE_CONF_DIR
+    fi
+
+    oslo-config-generator --config-file=evoque-config-generator.conf
+
+    EVOQUE_API_HOST=${EVOQUE_ENGINE_HOST:-$SERVICE_HOST}
+    EVOQUE_API_PORT=${EVOQUE_ENGINE_PORT:-8888}
+
+    cp $EVOQUE_DIR/etc/evoque/evoque.conf $EVOQUE_CONF_DIR
+
+    # common options
+    iniset $EVOQUE_CONF api port $EVOQUE_API_PORT
+    iniset $EVOQUE_CONF api host $EVOQUE_API_HOST
+
+    if [ "$LOG_COLOR" == "True" ] && [ "$SYSLOG" == "False" ]; then
+        # Add color to logging output
+        setup_colorized_logging $EVOQUE_CONF DEFAULT
+    fi
+
+}
+
+# install_evoque() - Collect source and prepare
+function install_evoque {
+    git_clone $EVOQUE_REPO $EVOQUE_DIR $EVOQUE_BRANCH
+    setup_develop $EVOQUE_DIR
+}
+
+# start_evoque() - Start running processes, including screen
+function start_evoque {
+    run_process evoque-api "$EVOQUE_DIR/bin/evoque-api --config-file=$EVOQUE_CONF"
+}
+
+# stop_evoque() - Stop running processes
+function stop_evoque {
+    # Kill the screen windows
+    local serv
+    for serv in evoque-api; do
+        stop_process $serv
+    done
+}
+
+
+# Restore xtrace
+$XTRACE
+
+# Tell emacs to use shell-script-mode
+## Local variables:
+## mode: shell-script
+## End:
