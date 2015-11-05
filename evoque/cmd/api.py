@@ -11,12 +11,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from oslo_log import log
-
 from evoque.api import app
 
-LOG = log.getLogger(__name__)
 
-
-def api():
+def main():
     app.build_server()
