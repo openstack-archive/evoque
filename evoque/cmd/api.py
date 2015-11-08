@@ -11,8 +11,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from evoque.api import app
+from evoque.common import messaging
 
 
 def main():
+    messaging.setup()
+    from evoque.api import app
     app.build_server()

@@ -54,11 +54,11 @@ def _session(context):
 
 
 # Tickets
-def cluster_create(context, values):
-    cluster_ref = models.Cluster()
-    cluster_ref.update(values)
-    cluster_ref.save(_session(context))
-    return cluster_ref
+def ticket_create(context, values):
+    ticket_ref = models.Ticket()
+    ticket_ref.update(values)
+    ticket_ref.save(_session(context))
+    return ticket_ref
 
 
 # Utils

@@ -1,0 +1,101 @@
+# Licensed under the Apache License, Version 2.0 (the "License"); you may
+# not use this file except in compliance with the License. You may obtain
+# a copy of the License at
+#
+#         http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations
+# under the License.
+
+from oslo_context import context as base_context
+from oslo_utils import encodeutils
+
+from evoque.db import api as db_api
+
+
+class RequestContext(base_context.RequestContext):
+    '''Stores information about the security context.
+
+    The context encapsulates information related to the user accessing the
+    the system, as well as additional request information.
+    '''
+
+    def __init__(self, auth_token=None, user=None, project=None,
+                 domain=None, user_domain=None, project_domain=None,
+                 is_admin=None, read_only=False, show_deleted=False,
+                 request_id=None, auth_url=None, trusts=None,
+                 user_name=None, project_name=None, domain_name=None,
+                 user_domain_name=None, project_domain_name=None,
+                 auth_token_info=None, region_name=None, roles=None,
+                 password=None, **kwargs):
+
+        '''Initializer of request context.'''
+        # We still have 'tenant' param because oslo_context still use it.
+        super(RequestContext, self).__init__(
+            auth_token=auth_token, user=user, tenant=project,
+            domain=domain, user_domain=user_domain,
+            project_domain=project_domain,
+            read_only=read_only, show_deleted=show_deleted,
+            request_id=request_id)
+
+        # request_id might be a byte array
+        self.request_id = encodeutils.safe_decode(self.request_id)
+
+        # we save an additional 'project' internally for use
+        self.project = project
+
+        # Session for DB access
+        self._session = None
+
+        self.auth_url = auth_url
+        self.trusts = trusts
+
+        self.user_name = user_name
+        self.project_name = project_name
+        self.domain_name = domain_name
+        self.user_domain_name = user_domain_name
+        self.project_domain_name = project_domain_name
+
+        self.auth_token_info = auth_token_info
+        self.region_name = region_name
+        self.roles = roles or []
+        self.password = password
+
+        self.is_admin = is_admin
+
+    @property
+    def session(self):
+        if self._session is None:
+            self._session = db_api.get_session()
+        return self._session
+
+    def to_dict(self):
+        return {
+            'auth_url': self.auth_url,
+            'auth_token': self.auth_token,
+            'auth_token_info': self.auth_token_info,
+            'user': self.user,
+            'user_name': self.user_name,
+            'user_domain': self.user_domain,
+            'user_domain_name': self.user_domain_name,
+            'project': self.project,
+            'project_name': self.project_name,
+            'project_domain': self.project_domain,
+            'project_domain_name': self.project_domain_name,
+            'domain': self.domain,
+            'domain_name': self.domain_name,
+            'trusts': self.trusts,
+            'region_name': self.region_name,
+            'roles': self.roles,
+            'show_deleted': self.show_deleted,
+            'is_admin': self.is_admin,
+            'request_id': self.request_id,
+            'password': self.password,
+        }
+
+    @classmethod
+    def from_dict(cls, values):
+        return cls(**values)

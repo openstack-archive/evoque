@@ -33,4 +33,9 @@ def list_opts():
                        help=('The maximum number of items returned in a '
                              'single response from a collection resource')),
         )),
+        (None, (
+            cfg.StrOpt('host',
+                       default='0.0.0.0',
+                       help='The listen IP for the Evoque engine server.'),
+        )),
     ]
