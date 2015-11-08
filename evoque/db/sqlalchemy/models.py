@@ -17,7 +17,6 @@ SQLAlchemy models for Evoque data.
 import uuid
 
 from oslo_db.sqlalchemy import models
-from oslo_utils import timeutils
 import sqlalchemy
 from sqlalchemy.ext import declarative
 
@@ -32,15 +31,7 @@ class EvoqueBase(models.TimestampMixin,
 
     __table_args__ = {'mysql_engine': 'InnoDB'}
 
-    deleted_at = sqlalchemy.Column(sqlalchemy.DateTime)
-    deleted = sqlalchemy.Column(sqlalchemy.Boolean, default=False)
-    metadata = None
-
-    def delete(self, session):
-        """Delete this object."""
-        self.deleted = True
-        self.deleted_at = timeutils.utcnow()
-        self.save(session=session)
+    metadata = sqlalchemy.Column(types.Dict)
 
 
 class Ticket(BASE, EvoqueBase):
@@ -53,15 +44,10 @@ class Ticket(BASE, EvoqueBase):
     name = sqlalchemy.Column('name', sqlalchemy.String(255))
     type = sqlalchemy.Column(sqlalchemy.String(255))
     status = sqlalchemy.Column(sqlalchemy.String(255))
-    meta_data = sqlalchemy.Column(types.Dict)
 
-    user = sqlalchemy.Column(sqlalchemy.String(32), nullable=False)
-    project = sqlalchemy.Column(sqlalchemy.String(32), nullable=False)
+    user = sqlalchemy.Column(sqlalchemy.String(32))
+    project = sqlalchemy.Column(sqlalchemy.String(32))
     domain = sqlalchemy.Column(sqlalchemy.String(32))
-    user_id = sqlalchemy.Column(sqlalchemy.String(255), nullable=False)
-    project_id = sqlalchemy.Column(sqlalchemy.String(255), nullable=False)
+    user_id = sqlalchemy.Column(sqlalchemy.String(255))
+    project_id = sqlalchemy.Column(sqlalchemy.String(255))
     domain_id = sqlalchemy.Column(sqlalchemy.String(255))
-
-    created_time = sqlalchemy.Column(sqlalchemy.DateTime)
-    updated_time = sqlalchemy.Column(sqlalchemy.DateTime)
-    deleted_time = sqlalchemy.Column(sqlalchemy.DateTime)

@@ -30,6 +30,10 @@ def get_engine():
     return IMPL.get_engine()
 
 
+def get_session():
+    return IMPL.get_session()
+
+
 # Tickets
 def ticket_create(context, values):
     return IMPL.ticket_create(context, values)

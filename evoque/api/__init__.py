@@ -15,14 +15,26 @@ from pecan import rest
 
 from oslo_log import log
 
+from evoque.rpc import client as rpc_client
+
 LOG = log.getLogger(__name__)
 
 
 class TicketController(rest.RestController):
 
+    def __init__(self):
+        self.rpc_client = rpc_client.EngineClient()
+
     @pecan.expose('json')
     def get(self):
         return {"version": "1.0.0"}
+
+    @pecan.expose('json')
+    def post(self, **kwargs):
+        ticket = self.rpc_client.ticket_create(
+            {"fake": 'fake'}, kwargs['name'])
+
+        return ticket
 
 
 class V1Controller(object):
