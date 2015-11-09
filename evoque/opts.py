@@ -10,7 +10,16 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+import multiprocessing
+import socket
+
 from oslo_config import cfg
+
+
+try:
+    default_workers = multiprocessing.cpu_count() or 1
+except NotImplementedError:
+    default_workers = 1
 
 
 def list_opts():
@@ -25,7 +34,7 @@ def list_opts():
             cfg.BoolOpt('pecan_debug',
                         default=False,
                         help='Toggle Pecan Debug Middleware.'),
-            cfg.IntOpt('workers', min=1,
+            cfg.IntOpt('workers', default=default_workers,
                        help='Number of workers for Evoque API server. '
                        'By default the available number of CPU is used.'),
             cfg.IntOpt('max_limit',
@@ -33,9 +42,9 @@ def list_opts():
                        help=('The maximum number of items returned in a '
                              'single response from a collection resource')),
         )),
-        (None, (
+        ("DEFAULT", (
             cfg.StrOpt('host',
-                       default='0.0.0.0',
+                       default=socket.getfqdn(),
                        help='The listen IP for the Evoque engine server.'),
         )),
     ]

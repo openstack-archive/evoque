@@ -15,6 +15,7 @@ import pecan
 import webob.exc
 from werkzeug import serving
 
+from evoque.api import hooks
 from evoque import exceptions
 from evoque import service
 
@@ -25,6 +26,10 @@ PECAN_CONFIG = {
     'app': {
         'root': 'evoque.api.RootController',
         'modules': ['evoque.api'],
+        'hooks': [
+            hooks.ContextHook(),
+            hooks.RPCHook(),
+        ],
     },
 }
 
@@ -56,6 +61,7 @@ def setup_app(config=PECAN_CONFIG, cfg=None):
     app = pecan.make_app(
         config['app']['root'],
         debug=pecan_debug,
+        hooks=config['app']['hooks'],
         guess_content_type_from_ext=False,
     )
 

@@ -11,35 +11,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import logging
-import multiprocessing
+import sys
 
 from oslo_config import cfg
-from oslo_log import log
+from oslo_log import log as logging
 
 from evoque import opts
 
-LOG = log.getLogger(__name__)
+LOG = logging.getLogger(__name__)
 
 
-def prepare_service(args=None):
-    conf = cfg.ConfigOpts()
-    log.register_options(conf)
+def prepare_service():
 
     # Register Evoque options
     for group, options in opts.list_opts():
-        conf.register_opts(list(options),
-                           group=None if group == "DEFAULT" else group)
+        cfg.CONF.register_opts(
+            list(options),
+            group=None if group == "DEFAULT" else group)
 
-    try:
-        default_workers = multiprocessing.cpu_count() or 1
-    except NotImplementedError:
-        default_workers = 1
+    logging.register_options(cfg.CONF)
+    cfg.CONF(sys.argv[1:], project='evoque')
 
-    conf.set_default("workers", default_workers, group="api")
+    logging.setup(cfg.CONF, 'evoque')
 
-    conf(args, project='evoque', validate_default_values=True)
-    log.setup(conf, 'evoque')
-    conf.log_opt_values(LOG, logging.DEBUG)
-
-    return conf
+    return cfg.CONF

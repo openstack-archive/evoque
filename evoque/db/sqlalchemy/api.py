@@ -44,20 +44,20 @@ def get_backend():
 
 
 def model_query(context, *args):
-    session = _session(context)
+    session = _session()
     query = session.query(*args)
     return query
 
 
-def _session(context):
-    return (context and context.session) or get_session()
+def _session():
+    return get_session()
 
 
 # Tickets
 def ticket_create(context, values):
     ticket_ref = models.Ticket()
     ticket_ref.update(values)
-    ticket_ref.save(_session(context))
+    ticket_ref.save(_session())
     return ticket_ref
 
 
