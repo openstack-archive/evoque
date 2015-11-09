@@ -19,9 +19,9 @@ from oslo_config import cfg
 from oslo_log import log as logging
 from oslo_service import service
 
+from evoque.common.i18n import _LI
 from evoque.common import rpc_service
 from evoque.engine.ticket import endpoint as ticket_endpoint
-from evoque.i18n import _LI
 from evoque import service as evoque_service
 
 LOG = logging.getLogger(__name__)
