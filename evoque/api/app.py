@@ -16,8 +16,8 @@ import webob.exc
 from werkzeug import serving
 
 from evoque.api import hooks
+from evoque.common import service
 from evoque import exceptions
-from evoque import service
 
 LOG = log.getLogger(__name__)
 
