@@ -15,6 +15,8 @@ import socket
 
 from oslo_config import cfg
 
+from evoque.common.i18n import _
+
 
 try:
     default_workers = multiprocessing.cpu_count() or 1
@@ -27,24 +29,23 @@ def list_opts():
         ("api", (
             cfg.PortOpt('port',
                         default=8888,
-                        help='The port for the Evoque API server.'),
+                        help=_('The port for the Evoque API server.')),
             cfg.StrOpt('host',
                        default='0.0.0.0',
-                       help='The listen IP for the Evoque API server.'),
+                       help=_('The listen IP for the Evoque API server.')),
             cfg.BoolOpt('pecan_debug',
                         default=False,
-                        help='Toggle Pecan Debug Middleware.'),
+                        help=_('Toggle Pecan Debug Middleware.')),
             cfg.IntOpt('workers', default=default_workers,
-                       help='Number of workers for Evoque API server. '
-                       'By default the available number of CPU is used.'),
+                       help=_('Number of workers for Evoque API server.')),
             cfg.IntOpt('max_limit',
                        default=1000,
-                       help=('The maximum number of items returned in a '
-                             'single response from a collection resource')),
+                       help=_('The maximum number of items returned in a '
+                              'single response from a collection resource')),
         )),
         ("DEFAULT", (
             cfg.StrOpt('host',
                        default=socket.getfqdn(),
-                       help='The listen IP for the Evoque engine server.'),
+                       help=_('The listen IP for the Evoque engine server.')),
         )),
     ]
