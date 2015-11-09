@@ -18,8 +18,6 @@ from oslo_log import log as logging
 
 from evoque import opts
 
-LOG = logging.getLogger(__name__)
-
 
 def prepare_service():
 

@@ -12,7 +12,7 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-"""Common RPC service and API tools for Magnum."""
+"""Common RPC service and API tools for Evoque."""
 
 import eventlet
 from oslo_config import cfg
