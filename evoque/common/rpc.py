@@ -28,7 +28,7 @@ import oslo_messaging as messaging
 from oslo_serialization import jsonutils
 
 from evoque.common import context as evoque_context
-from evoque import exceptions
+from evoque.common import exceptions
 
 
 CONF = cfg.CONF
