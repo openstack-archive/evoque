@@ -1,0 +1,9 @@
+Verified+2: Jenkins
+Code-Review+2: Liuqing Jing <lawrancejing@gmail.com>
+Workflow+1: Liuqing Jing <lawrancejing@gmail.com>
+Code-Review+2: xuan.mingyi <xuan.mingyi@99cloud.net>
+Submitted-by: Jenkins
+Submitted-at: Tue, 10 Nov 2015 02:03:12 +0000
+Reviewed-on: https://review.openstack.org/243104
+Project: openstack/evoque
+Branch: refs/heads/master
