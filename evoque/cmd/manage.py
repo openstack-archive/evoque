@@ -11,7 +11,7 @@
 # under the License.
 
 """
-Glance Management Utility
+Evoque Management Utility
 """
 
 import os

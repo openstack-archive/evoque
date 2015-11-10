@@ -12,7 +12,12 @@
 
 import pecan
 
+from oslo_config import cfg
+
+from evoque.api import auth
 from evoque.api import config as api_config
+
+CONF = cfg.CONF
 
 
 def get_pecan_config():
@@ -33,7 +38,10 @@ def setup_app(config=None):
         **app_conf
     )
 
-    # TODO(liuqing): Add oslo.middleware cors and keystone auth
+    # TODO(liuqing): Add oslo.middleware cors
     # http://docs.openstack.org/developer/oslo.middleware/cors.html
+
+    # Keystone auth middleware
+    app = auth.install(app, CONF, config.app.acl_public_routes)
 
     return app

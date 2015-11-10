@@ -21,6 +21,9 @@ app = {
         hooks.ContextHook(),
         hooks.RPCHook(),
     ],
+    'acl_public_routes': [
+        '/'
+    ],
 }
 
 # Custom Configurations must be in Python dictionary format::

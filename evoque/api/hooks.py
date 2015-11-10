@@ -12,8 +12,14 @@
 
 from pecan import hooks
 
+from oslo_config import cfg
+
 from evoque.common import context
 from evoque.engine.ticket import api as ticket_api
+
+CONF = cfg.CONF
+CONF.import_opt('auth_uri', 'keystonemiddleware.auth_token',
+                group='keystone_authtoken')
 
 
 class ContextHook(hooks.PecanHook):
@@ -52,8 +58,11 @@ class ContextHook(hooks.PecanHook):
         roles = headers.get('X-Roles', '').split(',')
         auth_token_info = state.request.environ.get('keystone.token_info')
 
+        auth_url = CONF.keystone_authtoken.auth_uri
+
         state.request.context = context.make_context(
             auth_token=auth_token,
+            auth_url=auth_url,
             auth_token_info=auth_token_info,
             user_name=user_name,
             user_id=user_id,

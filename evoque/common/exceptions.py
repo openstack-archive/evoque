@@ -10,6 +10,47 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+from oslo_log import log as logging
+
+from evoque.common.i18n import _
+from evoque.common.i18n import _LE
+
+LOG = logging.getLogger(__name__)
+
 
 class NotImplementedError(NotImplementedError):
     pass
+
+
+class EvoqueException(Exception):
+    """Base Evoque Exception
+    To correctly use this class, inherit from it and define
+    a 'message' property. That message will get printf'd
+    with the keyword arguments provided to the constructor.
+    """
+    message = _("An unknown exception occurred.")
+    code = 500
+
+    def __init__(self, message=None, **kwargs):
+        self.kwargs = kwargs
+
+        if 'code' not in self.kwargs and hasattr(self, 'code'):
+            self.kwargs['code'] = self.code
+
+        if message:
+            self.message = message
+
+        try:
+            self.message = self.message % kwargs
+        except Exception as e:
+            # kwargs doesn't match a variable in the message
+            # log the issue and the kwargs
+            LOG.exception(_LE('Exception in string format operation, '
+                              'kwargs: %s') % kwargs)
+            raise e
+
+        super(EvoqueException, self).__init__(self.message)
+
+
+class ConfigInvalid(EvoqueException):
+    message = _("Invalid configuration file. %(error_msg)s")

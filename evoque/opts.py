@@ -42,6 +42,11 @@ def list_opts():
                        default=1000,
                        help=_('The maximum number of items returned in a '
                               'single response from a collection resource')),
+            cfg.BoolOpt('enable_authentication',
+                        default=True,
+                        help=_('This option enables or disables user '
+                               'authentication via Keystone. '
+                               'Default value is True.')),
         )),
         ("DEFAULT", (
             cfg.StrOpt('host',
