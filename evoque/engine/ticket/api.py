@@ -20,3 +20,6 @@ class API(rpc_service.API):
 
     def ticket_create(self, name):
         return self._call('ticket_create', name=name)
+
+    def ticket_list(self):
+        return self._call('ticket_list')

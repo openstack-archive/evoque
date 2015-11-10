@@ -22,3 +22,7 @@ class Handler(object):
         values = {'name': name}
         ticket = db_api.ticket_create(context, values)
         return {'ticket': ticket}
+
+    def ticket_list(self, context):
+        tickets = db_api.ticket_get_all(context)
+        return {'tickets': tickets}

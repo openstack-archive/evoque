@@ -54,3 +54,14 @@ class EvoqueException(Exception):
 
 class ConfigInvalid(EvoqueException):
     message = _("Invalid configuration file. %(error_msg)s")
+
+
+class Invalid(EvoqueException):
+    message = _("Unacceptable parameters.")
+    code = 400
+
+
+# Cannot be templated as the error syntax varies.
+# msg needs to be constructed when raised.
+class InvalidParameterValue(Invalid):
+    message = _("%(err)s")

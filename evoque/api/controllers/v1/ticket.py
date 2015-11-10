@@ -26,3 +26,9 @@ class Controller(rest.RestController):
             name=kwargs['name'])
 
         return ticket
+
+    @pecan.expose('json')
+    def get_all(self):
+        tickets = pecan.request.rpcapi.ticket_list()
+
+        return tickets

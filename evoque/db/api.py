@@ -39,6 +39,12 @@ def ticket_create(context, values):
     return IMPL.ticket_create(context, values)
 
 
+def ticket_get_all(context, filters=None, limit=None, marker=None,
+                   sort_key=None, sort_dir=None):
+    return IMPL.ticket_get_all(context, filters=None, limit=None, marker=None,
+                               sort_key=None, sort_dir=None)
+
+
 # Utils
 def db_sync(engine, version=None):
     """Migrate the database to `version` or the most recent version."""
