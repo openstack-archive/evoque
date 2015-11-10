@@ -10,81 +10,30 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-from oslo_log import log
 import pecan
-import webob.exc
-from werkzeug import serving
 
-from evoque.api import hooks
-from evoque.common import service
-from evoque import exceptions
-
-LOG = log.getLogger(__name__)
+from evoque.api import config as api_config
 
 
-PECAN_CONFIG = {
-    'app': {
-        'root': 'evoque.api.RootController',
-        'modules': ['evoque.api'],
-        'hooks': [
-            hooks.ContextHook(),
-            hooks.RPCHook(),
-        ],
-    },
-}
+def get_pecan_config():
+    # Set up the pecan configuration
+    filename = api_config.__file__.replace('.pyc', '.py')
+    return pecan.configuration.conf_from_file(filename)
 
 
-class NotImplementedMiddleware(object):
-    def __init__(self, app):
-        self.app = app
+def setup_app(config=None):
+    if not config:
+        config = get_pecan_config()
 
-    def __call__(self, environ, start_response):
-        try:
-            return self.app(environ, start_response)
-        except exceptions.NotImplementedError:
-            raise webob.exc.HTTPNotImplemented(
-                "Sorry, this Evoque server does "
-                "not implement this feature :(")
-
-
-def setup_app(config=PECAN_CONFIG, cfg=None):
-    if cfg is None:
-        raise RuntimeError("Config is actually mandatory")
-
-    # NOTE(lawrancejing): pecan debug won't work in multi-process environment
-    pecan_debug = cfg.api.pecan_debug
-    if cfg.api.workers != 1 and pecan_debug:
-        pecan_debug = False
-        LOG.warning('pecan_debug cannot be enabled, if workers is > 1, '
-                    'the value is overrided with False')
+    app_conf = dict(config.app)
 
     app = pecan.make_app(
-        config['app']['root'],
-        debug=pecan_debug,
-        hooks=config['app']['hooks'],
-        guess_content_type_from_ext=False,
+        app_conf.pop('root'),
+        logging=getattr(config, 'logging', {}),
+        **app_conf
     )
 
+    # TODO(liuqing): Add oslo.middleware cors and keystone auth
+    # http://docs.openstack.org/developer/oslo.middleware/cors.html
+
     return app
-
-
-class WerkzeugApp(object):
-    # NOTE(lawrancejing): The purpose of this class is only to be used
-    # with werkzeug to create the app after the werkzeug
-    # fork gnocchi-api
-
-    def __init__(self, conf):
-        self.app = None
-        self.conf = conf
-
-    def __call__(self, environ, start_response):
-        if self.app is None:
-            self.app = setup_app(cfg=self.conf)
-        return self.app(environ, start_response)
-
-
-def build_server():
-    conf = service.prepare_service()
-    serving.run_simple(conf.api.host, conf.api.port,
-                       WerkzeugApp(conf),
-                       processes=conf.api.workers)

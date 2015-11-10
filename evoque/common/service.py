@@ -31,5 +31,3 @@ def prepare_service():
     cfg.CONF(sys.argv[1:], project='evoque')
 
     logging.setup(cfg.CONF, 'evoque')
-
-    return cfg.CONF

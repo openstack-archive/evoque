@@ -11,8 +11,40 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from evoque.api import app
+"""Evoque API service."""
+
+import os
+from werkzeug import serving
+
+from oslo_config import cfg
+from oslo_log import log as logging
+
+from evoque.api import app as api_app
+from evoque.common.i18n import _LI
+from evoque.common import service
+
+LOG = logging.getLogger(__name__)
+
+
+class WerkzeugApp(object):
+    # NOTE(lawrancejing): The purpose of this class is only to be used
+    # with werkzeug to create the wsgi app
+
+    def __init__(self, conf):
+        self.app = None
+        self.conf = conf
+
+    def __call__(self, environ, start_response):
+        if self.app is None:
+            self.app = api_app.setup_app()
+        return self.app(environ, start_response)
 
 
 def main():
-    app.build_server()
+    service.prepare_service()
+
+    LOG.info(_LI('Starting evoque api in PID %s') % os.getpid())
+
+    serving.run_simple(cfg.CONF.api.host, cfg.CONF.api.port,
+                       WerkzeugApp(cfg.CONF),
+                       processes=cfg.CONF.api.workers)
