@@ -21,4 +21,4 @@ class Handler(object):
     def ticket_create(self, context, name):
         values = {'name': name}
         ticket = db_api.ticket_create(context, values)
-        return ticket
+        return {'ticket': ticket}
