@@ -15,19 +15,40 @@
 #    under the License.
 
 import fixtures
+import sqlalchemy
+
 from oslo_config import cfg
-from oslo_log import log
+
+from evoque.db import api as db_api
 
 CONF = cfg.CONF
-CONF.import_opt('connection', 'oslo_db.options', group='database')
-CONF.import_opt('sqlite_synchronous', 'oslo_db.options', group='database')
 
 
-class ConfigFixture(fixtures.Fixture):
-    """Fixture to manage global conf settings."""
+class DBTestFixture(fixtures.Fixture):
+
+    def __init__(self):
+        # Use sqlite as test DB
+        self.sqlite_db = '/tmp/evoque.db'
+
+        CONF.set_default('connection', "sqlite://", group='database')
+        CONF.set_default('sqlite_db', self.sqlite_db, group='database')
+        CONF.set_default('sqlite_synchronous', False, group='database')
 
     def _setUp(self):
-        log.register_options(cfg.CONF)
-        CONF.set_default('connection', "sqlite://", group='database')
-        CONF.set_default('sqlite_synchronous', False, group='database')
-        self.addCleanup(CONF.reset)
+        self._setup_test_db()
+        self.addCleanup(self._reset_test_db)
+
+    def _setup_test_db(self):
+        engine = db_api.get_engine()
+        db_api.db_sync(engine)
+        engine.connect()
+
+    def _reset_test_db(self):
+        engine = db_api.get_engine()
+        meta = sqlalchemy.MetaData()
+        meta.reflect(bind=engine)
+
+        for table in reversed(meta.sorted_tables):
+            if table.name == 'migrate_version':
+                continue
+            engine.execute(table.delete())
