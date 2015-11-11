@@ -22,13 +22,13 @@ class Controller(rest.RestController):
 
     @pecan.expose('json')
     def post(self, **kwargs):
-        ticket = pecan.request.rpcapi.ticket_create(
+        ticket = pecan.request.ticket_api.ticket_create(
             name=kwargs['name'])
 
         return ticket
 
     @pecan.expose('json')
     def get_all(self):
-        tickets = pecan.request.rpcapi.ticket_list()
+        tickets = pecan.request.ticket_api.ticket_list()
 
         return tickets
