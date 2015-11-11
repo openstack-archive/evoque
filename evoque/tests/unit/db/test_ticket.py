@@ -22,4 +22,5 @@ from evoque.tests.unit.db import utils
 class DBTicketTestCase(base.DBTestCase):
 
     def test_ticket_create(self):
-        utils.ticket_create(self.context)
+        ticket = utils.ticket_create(self.context)
+        self.assertEqual(ticket.name, 'test-ticket')

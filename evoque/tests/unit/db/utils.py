@@ -20,4 +20,5 @@ from evoque.db import api as db_api
 
 def ticket_create(context):
     values = {"name": "test-ticket"}
-    db_api.ticket_create(context, values)
+    ticket = db_api.ticket_create(context, values)
+    return ticket
