@@ -51,3 +51,13 @@ class Ticket(BASE, EvoqueBase):
     user_id = sqlalchemy.Column(sqlalchemy.String(255))
     project_id = sqlalchemy.Column(sqlalchemy.String(255))
     domain_id = sqlalchemy.Column(sqlalchemy.String(255))
+
+
+class Workflow(BASE, EvoqueBase):
+
+    __tablename__ = 'workflow'
+
+    id = sqlalchemy.Column('id', sqlalchemy.String(36), primary_key=True,
+                           default=lambda: str(uuid.uuid4()))
+    name = sqlalchemy.Column('name', sqlalchemy.String(255))
+    steps = sqlalchemy.Column('steps', sqlalchemy.String())

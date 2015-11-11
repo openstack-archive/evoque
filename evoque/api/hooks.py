@@ -16,6 +16,7 @@ from oslo_config import cfg
 
 from evoque.common import context
 from evoque.engine.ticket import api as ticket_api
+from evoque.engine.workflow import api as workflow_api
 
 CONF = cfg.CONF
 CONF.import_opt('auth_uri', 'keystonemiddleware.auth_token',
@@ -78,4 +79,6 @@ class RPCHook(hooks.PecanHook):
 
     def before(self, state):
         state.request.ticket_api = ticket_api.API(
+            context=state.request.context)
+        state.request.workflow_api = workflow_api.API(
             context=state.request.context)
