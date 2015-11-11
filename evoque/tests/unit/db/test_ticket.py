@@ -15,7 +15,7 @@
 
 """Tests for manipulating Bays via the DB API"""
 
-from evoque.tests.unit.db import base
+from evoque.tests.unit import base
 from evoque.tests.unit.db import utils
 
 
