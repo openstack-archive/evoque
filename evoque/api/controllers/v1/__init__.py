@@ -13,6 +13,7 @@
 import pecan
 
 from evoque.api.controllers.v1 import ticket
+from evoque.api.controllers.v1 import workflow
 
 
 class Controller(object):
@@ -20,6 +21,7 @@ class Controller(object):
     def __init__(self):
         self.sub_controllers = {
             "ticket": ticket.Controller(),
+            "workflow": workflow.Controller(),
         }
 
         for name, ctrl in self.sub_controllers.items():
