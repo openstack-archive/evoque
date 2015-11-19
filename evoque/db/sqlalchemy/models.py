@@ -51,3 +51,21 @@ class Ticket(BASE, EvoqueBase):
     user_id = sqlalchemy.Column(sqlalchemy.String(255))
     project_id = sqlalchemy.Column(sqlalchemy.String(255))
     domain_id = sqlalchemy.Column(sqlalchemy.String(255))
+
+
+class Workflow(BASE, EvoqueBase):
+    """Represents a workflow created by the Evoque engine."""
+
+    __tablename__ = 'workflow'
+
+    id = sqlalchemy.Column('id', sqlalchemy.String(36), primary_key=True,
+                           default=lambda: str(uuid.uuid4()))
+    name = sqlalchemy.Column('name', sqlalchemy.String(255))
+    spec = sqlalchemy.Column('spec', types.MediumText())
+
+    user = sqlalchemy.Column(sqlalchemy.String(32))
+    project = sqlalchemy.Column(sqlalchemy.String(32))
+    domain = sqlalchemy.Column(sqlalchemy.String(32))
+    user_id = sqlalchemy.Column(sqlalchemy.String(255))
+    project_id = sqlalchemy.Column(sqlalchemy.String(255))
+    domain_id = sqlalchemy.Column(sqlalchemy.String(255))

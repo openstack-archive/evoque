@@ -45,6 +45,11 @@ def ticket_get_all(context, filters=None, limit=None, marker=None,
                                sort_key=None, sort_dir=None)
 
 
+# Workflows
+def workflow_create(context, values):
+    return workflow_create(context, values)
+
+
 # Utils
 def db_sync(engine, version=None):
     """Migrate the database to `version` or the most recent version."""

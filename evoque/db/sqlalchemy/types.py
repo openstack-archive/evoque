@@ -13,6 +13,7 @@
 import json
 
 from sqlalchemy.dialects import mysql
+from sqlalchemy import Text
 from sqlalchemy import types
 
 
@@ -32,3 +33,7 @@ class Dict(types.TypeDecorator):
         if value is None:
             return None
         return json.loads(value)
+
+
+def MediumText():
+    return Text().with_variant(mysql.MEDIUMTEXT(), 'mysql')
