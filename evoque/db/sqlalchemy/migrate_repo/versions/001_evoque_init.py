@@ -40,8 +40,29 @@ def upgrade(migrate_engine):
         mysql_charset='utf8'
     )
 
+    workflow = sqlalchemy.Table(
+        'workflow', meta,
+        sqlalchemy.Column('id', sqlalchemy.String(36),
+                          primary_key=True, nullable=False),
+        sqlalchemy.Column('name', sqlalchemy.String(255)),
+        sqlalchemy.Column('spec', types.MediumText()),
+        sqlalchemy.Column('user', sqlalchemy.String(32)),
+        sqlalchemy.Column('project', sqlalchemy.String(32)),
+        sqlalchemy.Column('domain', sqlalchemy.String(32)),
+        sqlalchemy.Column('user_id', sqlalchemy.String(255)),
+        sqlalchemy.Column('project_id', sqlalchemy.String(255)),
+        sqlalchemy.Column('domain_id', sqlalchemy.String(255)),
+        sqlalchemy.Column('metadata', types.Dict),
+        sqlalchemy.Column('created_at', sqlalchemy.DateTime),
+        sqlalchemy.Column('updated_at', sqlalchemy.DateTime),
+        sqlalchemy.Column('deleted_at', sqlalchemy.DateTime),
+        mysql_engine='InnoDB',
+        mysql_charset='utf8'
+    )
+
     tables = (
         ticket,
+        workflow
     )
 
     for index, table in enumerate(tables):

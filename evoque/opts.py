@@ -52,5 +52,8 @@ def list_opts():
             cfg.StrOpt('host',
                        default=socket.getfqdn(),
                        help=_('The listen IP for the Evoque engine server.')),
+            cfg.StrOpt('workflow_engine',
+                       default='spiff',
+                       help=_('The Evoque workflow engine driver.')),
         )),
     ]
