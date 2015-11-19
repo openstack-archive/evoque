@@ -23,6 +23,7 @@ from evoque.common.i18n import _LI
 from evoque.common import rpc_service
 from evoque.common import service as evoque_service
 from evoque.engine.ticket import endpoint as ticket_endpoint
+from evoque.engine.workflow import endpoint as workflow_endpoint
 
 LOG = logging.getLogger(__name__)
 
@@ -36,6 +37,7 @@ def main():
 
     endpoints = [
         ticket_endpoint.Handler(),
+        workflow_endpoint.Handler(),
     ]
 
     server = rpc_service.Service.create("evoque-engine",
