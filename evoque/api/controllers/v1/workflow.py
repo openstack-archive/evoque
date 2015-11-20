@@ -26,3 +26,9 @@ class Controller(rest.RestController):
             name=kwargs['name'], wf_spec=kwargs['wf_spec'])
 
         return workflow
+
+    @pecan.expose('json')
+    def get_all(self):
+        workflows = pecan.request.workflow_api.workflow_list()
+
+        return workflows

@@ -20,3 +20,6 @@ class API(rpc_service.API):
 
     def workflow_create(self, name, wf_spec):
         return self._call('workflow_create', name=name, wf_spec=wf_spec)
+
+    def workflow_list(self):
+        return self._call('workflow_list')

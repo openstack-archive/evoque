@@ -97,6 +97,13 @@ def workflow_create(context, values):
     return workflow_ref
 
 
+def workflow_get_all(context, filters=None, limit=None, marker=None,
+                     sort_key=None, sort_dir=None):
+    query = model_query(models.Workflow)
+    return _paginate_query(models.Workflow, limit, marker,
+                           sort_key, sort_dir, query)
+
+
 # Utils
 def db_sync(engine, version=None):
     """Migrate the database to `version` or the most recent version."""

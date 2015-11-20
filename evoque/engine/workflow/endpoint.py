@@ -23,3 +23,8 @@ class Handler(object):
         workflow = self.workflow_driver.workflow_create(
             context, name, wf_spec)
         return {'workflow': workflow}
+
+    def workflow_list(self, context):
+        workflows = self.workflow_driver.workflow_list(
+            context)
+        return {'workflows': workflows}
