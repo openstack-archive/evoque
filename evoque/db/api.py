@@ -50,6 +50,12 @@ def workflow_create(context, values):
     return IMPL.workflow_create(context, values)
 
 
+def workflow_get_all(context, filters=None, limit=None, marker=None,
+                     sort_key=None, sort_dir=None):
+    return IMPL.workflow_get_all(context, filters=None, limit=None,
+                                 marker=None, sort_key=None, sort_dir=None)
+
+
 # Utils
 def db_sync(engine, version=None):
     """Migrate the database to `version` or the most recent version."""

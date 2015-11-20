@@ -31,3 +31,7 @@ class Workflow(workflow.Base):
         }
         workflow = db_api.workflow_create(context, values)
         return workflow
+
+    def workflow_list(self, context):
+        workflows = db_api.workflow_get_all(context)
+        return workflows
