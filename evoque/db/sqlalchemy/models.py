@@ -33,6 +33,13 @@ class EvoqueBase(models.TimestampMixin,
 
     metadata = sqlalchemy.Column(types.Dict)
 
+    user = sqlalchemy.Column(sqlalchemy.String(32))
+    project = sqlalchemy.Column(sqlalchemy.String(32))
+    domain = sqlalchemy.Column(sqlalchemy.String(32))
+    user_id = sqlalchemy.Column(sqlalchemy.String(255))
+    project_id = sqlalchemy.Column(sqlalchemy.String(255))
+    domain_id = sqlalchemy.Column(sqlalchemy.String(255))
+
 
 class Ticket(BASE, EvoqueBase):
     """Represents a ticket created by the Evoque engine."""
@@ -45,13 +52,6 @@ class Ticket(BASE, EvoqueBase):
     type = sqlalchemy.Column(sqlalchemy.String(255))
     status = sqlalchemy.Column(sqlalchemy.String(255))
 
-    user = sqlalchemy.Column(sqlalchemy.String(32))
-    project = sqlalchemy.Column(sqlalchemy.String(32))
-    domain = sqlalchemy.Column(sqlalchemy.String(32))
-    user_id = sqlalchemy.Column(sqlalchemy.String(255))
-    project_id = sqlalchemy.Column(sqlalchemy.String(255))
-    domain_id = sqlalchemy.Column(sqlalchemy.String(255))
-
 
 class Workflow(BASE, EvoqueBase):
     """Represents a workflow created by the Evoque engine."""
@@ -62,10 +62,3 @@ class Workflow(BASE, EvoqueBase):
                            default=lambda: str(uuid.uuid4()))
     name = sqlalchemy.Column('name', sqlalchemy.String(255))
     spec = sqlalchemy.Column('spec', types.MediumText())
-
-    user = sqlalchemy.Column(sqlalchemy.String(32))
-    project = sqlalchemy.Column(sqlalchemy.String(32))
-    domain = sqlalchemy.Column(sqlalchemy.String(32))
-    user_id = sqlalchemy.Column(sqlalchemy.String(255))
-    project_id = sqlalchemy.Column(sqlalchemy.String(255))
-    domain_id = sqlalchemy.Column(sqlalchemy.String(255))
