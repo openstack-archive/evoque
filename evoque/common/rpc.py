@@ -12,15 +12,9 @@
 
 __all__ = [
     'init',
-    'cleanup',
-    'set_defaults',
-    'add_extra_exmods',
-    'clear_extra_exmods',
-    'get_allowed_exmods',
     'RequestContextSerializer',
     'get_client',
     'get_server',
-    'get_notifier',
 ]
 
 from oslo_config import cfg
@@ -28,50 +22,16 @@ import oslo_messaging as messaging
 from oslo_serialization import jsonutils
 
 from evoque.common import context as evoque_context
-from evoque.common import exceptions
-
 
 CONF = cfg.CONF
 TRANSPORT = None
-NOTIFIER = None
-
-ALLOWED_EXMODS = [
-    exceptions.__name__,
-]
-EXTRA_EXMODS = []
 
 
-def init(conf):
-    global TRANSPORT, NOTIFIER
-    exmods = get_allowed_exmods()
-    TRANSPORT = messaging.get_transport(conf,
-                                        allowed_remote_exmods=exmods)
-    serializer = RequestContextSerializer(JsonPayloadSerializer())
-    NOTIFIER = messaging.Notifier(TRANSPORT, serializer=serializer)
-
-
-def cleanup():
-    global TRANSPORT, NOTIFIER
-    assert TRANSPORT is not None
-    assert NOTIFIER is not None
-    TRANSPORT.cleanup()
-    TRANSPORT = NOTIFIER = None
-
-
-def set_defaults(control_exchange):
-    messaging.set_transport_defaults(control_exchange)
-
-
-def add_extra_exmods(*args):
-    EXTRA_EXMODS.extend(args)
-
-
-def clear_extra_exmods():
-    del EXTRA_EXMODS[:]
-
-
-def get_allowed_exmods():
-    return ALLOWED_EXMODS + EXTRA_EXMODS
+def init():
+    global TRANSPORT
+    if not TRANSPORT:
+        TRANSPORT = messaging.get_transport(CONF)
+    return TRANSPORT
 
 
 class JsonPayloadSerializer(messaging.NoOpSerializer):
@@ -119,10 +79,3 @@ def get_server(target, endpoints, serializer=None):
                                     endpoints,
                                     executor='eventlet',
                                     serializer=serializer)
-
-
-def get_notifier(service='container', host=None, publisher_id=None):
-    assert NOTIFIER is not None
-    if not publisher_id:
-        publisher_id = "%s.%s" % (service, host or CONF.host)
-    return NOTIFIER.prepare(publisher_id=publisher_id)

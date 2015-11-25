@@ -35,13 +35,10 @@ class Service(service.Service):
 
     def __init__(self, topic, server, handlers, binary):
         super(Service, self).__init__()
-        serializer = rpc.RequestContextSerializer(
-            rpc.JsonPayloadSerializer())
-        transport = messaging.get_transport(cfg.CONF)
-        # TODO(asalkeld) add support for version='x.y'
+        rpc.init()
         target = messaging.Target(topic=topic, server=server)
-        self._server = messaging.get_rpc_server(transport, target, handlers,
-                                                serializer=serializer)
+        self._server = rpc.get_server(target, handlers)
+
         self.binary = binary
 
     def start(self):
@@ -59,19 +56,11 @@ class Service(service.Service):
 class API(object):
     def __init__(self, transport=None, context=None, topic=None, server=None,
                  timeout=None):
-        serializer = rpc.RequestContextSerializer(
-            rpc.JsonPayloadSerializer())
-        if transport is None:
-            exmods = rpc.get_allowed_exmods()
-            transport = messaging.get_transport(cfg.CONF,
-                                                allowed_remote_exmods=exmods)
         self._context = context
-        if topic is None:
-            topic = ''
+
+        rpc.init()
         target = messaging.Target(topic=topic, server=server)
-        self._client = messaging.RPCClient(transport, target,
-                                           serializer=serializer,
-                                           timeout=timeout)
+        self._client = rpc.get_client(target)
 
     def _call(self, method, *args, **kwargs):
         return self._client.call(self._context, method, *args, **kwargs)
