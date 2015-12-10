@@ -7,7 +7,6 @@
 *.egg/
 *.egg-info/
 coverage.xml
-etc/evoque/evoque.conf.sample
 nosetests.xml
 pep8.txt
 pylint.txt
