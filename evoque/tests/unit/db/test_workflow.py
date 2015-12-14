@@ -24,3 +24,7 @@ class DBWorkflowTestCase(base.DBTestCase):
     def test_workflow_create(self):
         workflow = utils.workflow_create(self.context)
         self.assertEqual(workflow.name, 'test-workflow')
+
+    def test_workflow_list(self):
+        workflows = utils.workflow_list(self.context)
+        self.assertFalse(workflows)
