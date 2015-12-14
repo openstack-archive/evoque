@@ -26,6 +26,8 @@ def upgrade(migrate_engine):
         sqlalchemy.Column('name', sqlalchemy.String(255)),
         sqlalchemy.Column('type', sqlalchemy.String(255)),
         sqlalchemy.Column('status', sqlalchemy.String(255)),
+        sqlalchemy.Column('workflow_id', sqlalchemy.String(36),
+                          sqlalchemy.ForeignKey('workflow.id')),
         sqlalchemy.Column('user', sqlalchemy.String(32)),
         sqlalchemy.Column('project', sqlalchemy.String(32)),
         sqlalchemy.Column('domain', sqlalchemy.String(32)),
