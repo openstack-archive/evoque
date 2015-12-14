@@ -13,25 +13,14 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-"""Evoque test utilities."""
+"""Tests for manipulating Bays via the DB API"""
 
-from evoque.db import api as db_api
-
-
-# Tickets
-def ticket_create(context):
-    values = {"name": "test-ticket"}
-    ticket = db_api.ticket_create(context, values)
-    return ticket
+from evoque.tests.unit import base
+from evoque.tests.unit.db import utils
 
 
-def ticket_list(context):
-    tickets = db_api.ticket_get_all(context)
-    return tickets
+class DBWorkflowTestCase(base.DBTestCase):
 
-
-# Workflows
-def workflow_create(context):
-    values = {"name": "test-workflow"}
-    workflow = db_api.workflow_create(context, values)
-    return workflow
+    def test_workflow_create(self):
+        workflow = utils.workflow_create(self.context)
+        self.assertEqual(workflow.name, 'test-workflow')
