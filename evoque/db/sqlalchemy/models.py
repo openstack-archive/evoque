@@ -48,6 +48,8 @@ class Ticket(BASE, EvoqueBase):
 
     id = sqlalchemy.Column('id', sqlalchemy.String(36), primary_key=True,
                            default=lambda: str(uuid.uuid4()))
+    workflow_id = sqlalchemy.Column(sqlalchemy.String(36),
+                                    sqlalchemy.ForeignKey('workflow.id'))
     name = sqlalchemy.Column('name', sqlalchemy.String(255))
     type = sqlalchemy.Column(sqlalchemy.String(255))
     status = sqlalchemy.Column(sqlalchemy.String(255))
