@@ -22,3 +22,8 @@ def ticket_create(context):
     values = {"name": "test-ticket"}
     ticket = db_api.ticket_create(context, values)
     return ticket
+
+
+def ticket_list(context):
+    tickets = db_api.ticket_get_all(context)
+    return tickets

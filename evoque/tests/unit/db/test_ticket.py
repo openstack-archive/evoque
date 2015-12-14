@@ -24,3 +24,7 @@ class DBTicketTestCase(base.DBTestCase):
     def test_ticket_create(self):
         ticket = utils.ticket_create(self.context)
         self.assertEqual(ticket.name, 'test-ticket')
+
+    def test_ticket_list(self):
+        tickets = utils.ticket_list(self.context)
+        self.assertFalse(tickets)
