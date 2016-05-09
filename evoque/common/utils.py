@@ -29,7 +29,7 @@ def safe_rstrip(value, chars=None):
     :return: Stripped value.
     """
     if not isinstance(value, six.string_types):
-        LOG.warn(_LW("Failed to remove trailing character. Returning "
+        LOG.warning(_LW("Failed to remove trailing character. Returning "
                      "original object. Supplied object is not a string: %s,"),
                  value)
         return value
