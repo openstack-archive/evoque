@@ -42,12 +42,12 @@ class EvoqueException(Exception):
 
         try:
             self.message = self.message % kwargs
-        except Exception as e:
+        except Exception:
             # kwargs doesn't match a variable in the message
             # log the issue and the kwargs
             LOG.exception(_LE('Exception in string format operation, '
                               'kwargs: %s') % kwargs)
-            raise e
+            raise
 
         super(EvoqueException, self).__init__(self.message)
 
