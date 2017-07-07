@@ -4,8 +4,7 @@
 .coverage*
 .noseids
 .DS_STORE
-*.egg/
-*.egg-info/
+*.egg*
 coverage.xml
 nosetests.xml
 pep8.txt
