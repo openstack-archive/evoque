@@ -1,24 +1,10 @@
-OpenStack Evoque README
-=======================
+This project is no longer maintained.
 
-OpenStack Evoque provides ticket service.
+The contents of this repository are still available in the Git
+source code management system.  To see the contents of this
+repository before it reached its end of life, please check out the
+previous commit with "git checkout HEAD^1".
 
-Wiki
------
-https://wiki.openstack.org/wiki/Evoque
-
-Launchpad Projects
-------------------
-https://launchpad.net/evoque
-
-Code Repository
----------------
-https://github.com/openstack/evoque
-
-Blueprints
-----------
-https://blueprints.launchpad.net/evoque
-
-Bug Tracking
-------------
-https://bugs.launchpad.net/evoque
+For any further questions, please email
+openstack-dev@lists.openstack.org or join #openstack-dev on
+Freenode.
